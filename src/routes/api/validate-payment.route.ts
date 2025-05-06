@@ -2,6 +2,7 @@ import { Router } from 'express';
 import createHttpError from 'http-errors';
 import { asyncHandler } from '../../middleware/asyncHandler';
 import { fetchPayment } from '../../services/payment.service';
+import { validatePayment } from '../../services/payment-validation.service';
 
 const router = Router();
 
@@ -35,19 +36,13 @@ router.post(
       const result = await fetchPayment(txHash);
       const payment = result.yodlPayments[paymentIndex || 0];
 
-      // Validate token is in approved list
-      if (!acceptedTokens.includes(payment.tokenIn.yodlConfig.symbol)) {
-        return res.status(400).json({ error: 'Payment token not in approved list' });
+      const validation = validatePayment(payment, acceptedTokens, expectedAmount);
+
+      if (!validation.isValid) {
+        return res.status(400).json({ error: validation.error });
       }
 
-      const amountPaid = payment.tokenOutGross; // Amount before fees
-
-      // Validate amount paid is equal or greater than expected
-      if (amountPaid < expectedAmount) {
-        return res.status(400).json({ error: 'Payment amount less than expected' });
-      }
-
-      res.status(200).json({ message: 'Payment validated successfully', payment });
+      res.status(200).json({ message: 'Payment validated successfully', payment: validation.payment });
     } catch (error) {
       res.status(500).json({ error: 'Verification failed' });
     }

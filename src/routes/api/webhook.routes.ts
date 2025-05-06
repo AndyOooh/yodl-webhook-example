@@ -39,12 +39,10 @@ router.post(
         return res.status(401).json({ error: 'Invalid signature' });
       }
 
-      const data = req.body; // txHash, chainId, paymentIndex
-
       // TODO (optional):
       // Update Database/send notification to frontend here
 
-      return res.status(200).json({ message: 'Webhook received and verified', data });
+      return res.status(200).json({ message: 'Webhook received and verified', data: req.body });
     } catch (error) {
       res.status(500).json({ error: 'Verification failed' });
     }
