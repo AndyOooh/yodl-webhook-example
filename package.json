@@ -1,5 +1,6 @@
 {
   "name": "yodl-webhooks-example",
+  "description": "Template for Yodl mini-app (yapp) builders to implement webhook verification and payment validation",
   "version": "0.1.0",
   "main": "index.js",
   "author": "Andreas Oee",
