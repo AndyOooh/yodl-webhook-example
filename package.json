@@ -16,10 +16,15 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "http-errors": "^2.0.0",
     "typescript": "^5.8.3",
     "viem": "^2.29.0"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120
   }
 }
