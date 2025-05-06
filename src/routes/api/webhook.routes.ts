@@ -41,10 +41,10 @@ router.post(
 
       const data = req.body; // txHash, chainId, paymentIndex
 
-      return res.status(200).json({ message: 'Webhook received and verified', data });
-
       // TODO (optional):
       // Update Database/send notification to frontend here
+
+      return res.status(200).json({ message: 'Webhook received and verified', data });
     } catch (error) {
       res.status(500).json({ error: 'Verification failed' });
     }
