@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
-import { TransactionResponse } from '../types/transaction.js';
+import { PaymentResponse } from '../types/payment.js';
 
-export async function fetchPayment(txHash: string): Promise<TransactionResponse> {
+export async function fetchPayment(txHash: string): Promise<PaymentResponse> {
   const response = await fetch(`${process.env.YODL_INDEXER_URL}/tx/${txHash}`);
 
   if (!response.ok) {
