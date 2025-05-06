@@ -11,6 +11,10 @@ const router = Router();
  * @route POST /api/validate-payment
  * @description Fetches payment details from Yodl indexer API and validates against request parameters
  *
+ * @warning This endpoint assumes that all tokens in acceptedTokens are pegged to the same currency
+ * as the expectedAmount. For example, if expectedAmount is in USD, all acceptedTokens should be
+ * USD-pegged stablecoins.
+ *
  * @param {string} req.body.txHash - The transaction hash of the payment
  * @param {number} [req.body.paymentIndex] - The index of the payment in the transaction (defaults to 0)
  * @param {string[]} req.body.acceptedTokens - The list of tokens that are accepted for payment
