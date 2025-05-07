@@ -3,6 +3,7 @@ import { Router } from 'express';
 import createHttpError from 'http-errors';
 import { Hex, isHex, verifyMessage } from 'viem';
 import { asyncHandler } from '../../middleware/asyncHandler';
+import { getYodlSigningAddress } from '../../services/ens.service';
 
 const router = Router();
 
@@ -29,10 +30,12 @@ router.post(
     const message = JSON.stringify(req.body);
 
     try {
+      const signingAddress = await getYodlSigningAddress();
+
       const isValid = await verifyMessage({
         message,
         signature,
-        address: process.env.YODL_SIGNING_ADDRESS as Hex,
+        address: signingAddress as Hex,
       });
 
       if (!isValid) {
