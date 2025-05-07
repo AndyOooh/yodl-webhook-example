@@ -7,6 +7,7 @@ This repository serves as a template for Yodl mini-app (yapp) builders to implem
 - 🔐 Webhook signature verification
 - 💰 Payment validation against expected parameters
 - 🛡️ Type-safe Express.js implementation
+- 🌐 ENS resolution for production signing address
 
 ## Prerequisites
 
@@ -15,9 +16,13 @@ This repository serves as a template for Yodl mini-app (yapp) builders to implem
 
 ## Environment Variables
 
-Rename the `.env.example` file to `.env`.
-Replace `YODL_SIGNING_ADDRESS` with the values provided by Yodl.
-`YODL_SIGNING_KEY` is only use for running test scripts locally.
+Rename the `.env.example` file to `.env` and configure the following variables:
+
+- `YODL_SIGNING_ADDRESS`: Required in development mode. The address used to verify webhook signatures.
+- `YODL_SIGNING_KEY`: Only used for running test scripts locally.
+- `NODE_ENV`: Set to 'development' for local testing, 'production' for production use.
+
+Note: In production, the signing address is automatically resolved from the ENS name `webhooks.yodl.eth`. In development, it uses the address from `YODL_SIGNING_ADDRESS` environment variable.
 
 ## Install dependencies
 
@@ -74,6 +79,22 @@ Validates a payment against expected parameters.
 }
 ```
 
+## Test Scripts
+
+The `src/test` directory contains standalone TypeScript scripts for testing various functionalities. These are not powered by Jest or other test runners, but rather are simple scripts that can be run directly.
+
+To run a test script:
+
+```bash
+npx tsx src/test/<script-name>.ts
+```
+
+Available test scripts:
+
+- `getYodlSigningAddress.test.ts`: Tests ENS resolution and caching for the Yodl signing address
+- `webhook.test.ts`: Tests webhook signature generation and verification
+- `payment-validation.test.ts`: Tests payment validation logic
+
 ## Usage Example
 
 1. **Receiving Webhooks**
@@ -102,9 +123,10 @@ const response = await fetch('/api/validate-payment', {
 ## Security Considerations
 
 1. Always verify webhook signatures using the provided `x-yodl-signature` header
-2. Store your Yodl signing address securely in environment variables
-3. Validate all payment parameters before processing
-4. Use HTTPS in production
+2. In development, store your Yodl signing address securely in environment variables
+3. In production, the signing address is automatically resolved from ENS
+4. Validate all payment parameters before processing
+5. Use HTTPS in production
 
 ## Contributing
 

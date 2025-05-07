@@ -30,7 +30,9 @@ router.post(
     const message = JSON.stringify(req.body);
 
     try {
-      const signingAddress = await getYodlSigningAddress();
+      // In dev use env var (Anvil address), in prod fetch from ENS.
+      const signingAddress =
+        process.env.NODE_ENV === 'development' ? process.env.YODL_SIGNING_ADDRESS : await getYodlSigningAddress();
 
       const isValid = await verifyMessage({
         message,
