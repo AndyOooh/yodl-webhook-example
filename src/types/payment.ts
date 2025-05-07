@@ -1,57 +1,25 @@
-import { type Address, type Hex } from 'viem';
-
 export type PaymentResponse = {
-  txHash: Hex;
-  chainId: number;
-  state: string;
-  gasFee: string;
-  blockTimestamp: string;
-  yodlPayments: YodlPayment[];
+  payment: YodlPayment;
 };
 
 export type YodlPayment = {
-  txHash: Hex;
-  paymentIndex: number;
-  memo: string;
-  tokenOut: Token;
-  invoiceCurrency: string;
-  invoiceAmount: string;
-  invoiceAmountInUsd: string;
-  tokenOutGross: string;
-  yodlFee: null;
-  totalFees: null;
-  tokenOutNet: string;
-  tokenIn: Token;
-  sender: Person;
-  receiver: Person;
-
   chainId: number;
+  txHash: string;
+  paymentIndex: number;
   blockTimestamp: string;
 
   tokenOutSymbol: string;
-  tokenOutAddress: Address;
+  tokenOutAddress: string;
   tokenOutAmountGross: string;
 
-  receiverAddress: Address;
+  receiverAddress: string;
   receiverEnsPrimaryName: string;
-  receiverYodlConfig: null;
+  receiverYodlConfig: any;
 
-  senderAddress: Address;
+  invoiceCurrency: string;
+  invoiceAmount: string;
+
+  senderAddress: string;
   senderEnsPrimaryName: string;
-};
-
-export type Token = {
-  chainId: number;
-  address: Address;
-  yodlConfig: YodlConfig;
-};
-
-export type YodlConfig = {
-  symbol: string;
-  decimals: number;
-};
-
-export type Person = {
-  address: Address;
-  ensPrimaryName?: string;
+  memo: string;
 };

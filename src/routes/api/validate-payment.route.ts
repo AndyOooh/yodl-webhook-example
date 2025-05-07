@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import createHttpError from 'http-errors';
 import { asyncHandler } from '../../middleware/asyncHandler';
-import { fetchPayment } from '../../services/payment.service';
 import { validatePayment } from '../../services/payment-validation.service';
 
 const router = Router();
@@ -20,6 +19,7 @@ const router = Router();
  * @param {number} [req.body.paymentIndex] - The index of the payment in the transaction (defaults to 0)
  * @param {string[]} req.body.acceptedTokens - The list of tokens that are accepted for payment
  * @param {number} req.body.expectedAmount - The expected amount of the payment
+ * @param {string} req.body.receiverEnsOrAddress - The ENS name or address of the receiver
  *
  * @returns {Response} 200 - Payment validated successfully with payment details
  * @returns {Response} 400 - Invalid payment (wrong token or amount)
@@ -28,15 +28,16 @@ const router = Router();
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    const { txHash, paymentIndex, acceptedTokens, expectedAmount } = req.body;
+    const { txHash, acceptedTokens, expectedAmount, receiverEnsOrAddress } = req.body;
 
     if (!txHash || !acceptedTokens || !expectedAmount) throw createHttpError(400, 'Missing required fields');
 
     try {
-      const result = await fetchPayment(txHash);
-      const payment = result.yodlPayments[paymentIndex || 0];
-
-      const validation = validatePayment(payment, acceptedTokens, expectedAmount);
+      const validation = await validatePayment(txHash, {
+        acceptedTokens,
+        expectedAmount,
+        receiverEnsOrAddress,
+      });
 
       if (!validation.isValid) {
         return res.status(400).json({ error: validation.error });

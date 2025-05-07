@@ -1,10 +1,9 @@
 // Test data - you can modify these values
 const TEST_DATA = {
   txHash: '0x9422111abfc86ac0896abca1bfcec2d9c38d7765d0d24efb0b7d00ce389e279b',
-  chainId: 8453,
-  paymentIndex: 0,
   acceptedTokens: ['USDC', 'USDT'],
   expectedAmount: 0.01, // 1 USDC (6 decimals)
+  receiverEnsOrAddress: 'community.yodl.eth',
 };
 
 // Function to test payment validation endpoint
